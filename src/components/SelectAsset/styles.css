@@ -1,0 +1,9 @@
+.select {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+}
+
+.asset-icon {
+    padding-left: 2%;
+}

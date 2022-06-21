@@ -1,0 +1,13 @@
+.pagination {
+    margin-bottom: 1%;
+    padding-top: 10px;
+    margin-right: 1%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-top: solid grey 2px;
+}
+
+.asset-icon {
+    padding-right: 12%;
+}

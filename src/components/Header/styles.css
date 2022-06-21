@@ -1,0 +1,52 @@
+.balance {
+    display: inline;
+    padding: 6px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #ffffff;
+    letter-spacing: 0.02857em;
+}
+
+.asset {
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.info {
+    display: flex
+}
+
+.address {
+    display: inline;
+    padding: 6px 8px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.02857em;
+    background-color: #ffffff;
+    border-radius: 7px;
+}
+
+.header {
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1%;
+    border-bottom: solid grey 2px;
+}
+
+.connection {
+    display: flex;
+    align-items: center;
+    background-color: #1976d2;
+    border-radius: 7px;
+    padding: 6px;
+}
+
+.menu-button {
+    margin-top: 5px;
+    margin-left: 5px;
+    height: 45px;
+}
+

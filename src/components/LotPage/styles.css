@@ -1,0 +1,70 @@
+.lot {
+    display: flex;
+    height: calc(60vh - 7vh);
+    margin: 20vh 15vw;
+    background-color: #1976d2;
+    border-radius: 7px;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-box {
+    padding: 10px;
+    flex-basis: 40%;
+    margin: 20px;
+    background-color: #ffffff;
+    border-radius: 7px;
+}
+
+.info-box {
+    padding: 10px;
+    margin: 20px;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 7px;
+    flex-grow: 1;
+}
+
+.connect-button {
+    color: white;
+}
+
+.token-price {
+    display: flex;
+    margin-top: 10px;
+}
+
+.token-collection {
+    display: flex;
+    margin-top: 10px;
+}
+
+.token-id {
+    display: flex;
+    margin-top: 10px;
+}
+
+.value {
+    margin-left: 15px; 
+}
+
+.asset {
+    margin-left: 10px; 
+}
+
+.token-collection-address {
+    margin-left: 10px;
+}
+
+.buy-lot-button {
+    margin-bottom: 10px;
+    padding-top: 10px;
+    margin-right: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}

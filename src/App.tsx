@@ -1,24 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Header } from "./components/Header";
+import { LotTable } from "./components/LotTable";
+import { LotPage } from "./components/LotPage";
+import { CreateLotModal } from "./components/CreateLotModal";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header></Header>
+      <Routes>
+        <Route path="/">
+          <Route path="/lots">
+            <Route path="/lots/:lotId" element={<LotPage></LotPage>}></Route>
+            <Route path="/lots/all" element={<LotTable></LotTable>}></Route>
+            <Route path="/lots/my" element={<LotTable></LotTable>}></Route>
+          </Route>
+        </Route>       
+      </Routes>
     </div>
   );
 }

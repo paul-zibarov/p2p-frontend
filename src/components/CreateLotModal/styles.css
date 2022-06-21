@@ -1,0 +1,22 @@
+.modal {
+    margin: 30vh 30vw;
+    padding: 20px;
+    background-color: white;
+    border-radius: 7px;
+}
+
+.menu {
+    display: flex;
+    justify-content: end;
+}
+
+.button {
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.select {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+}
