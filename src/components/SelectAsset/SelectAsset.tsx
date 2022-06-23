@@ -1,40 +1,51 @@
 import { useState } from 'react';
 import { MenuItem, Box, TextField } from '@mui/material';
+import { BigNumber } from 'ethers';
 
-import './styles.css';
 import { getAssetTypes, getCollections } from '../../constants';
+import { useMetaMask } from '../../hooks/metamask';
+import { useContracts } from '../../hooks/contracts';
+import { Asset } from '../../types/Asset';
+import './styles.css';
 
-export function SelectAsset(props: { title: string, update: (data: {}) => void }) {
+export function SelectAsset(props: { title: string, update: (data: Asset) => void }) {
   const [collections, setCollections] = useState(['']);
   const [tokens, setTokens] = useState(['']);
 
   const [selectedAsset, setSelectedAsset] = useState('');
-  const [selectedAssetAddress, setselectedAssetAddress] = useState('');
+  const [selectedAssetAddress, setSelectedAssetAddress] = useState('');
   const [selectedToken, setSelectedToken] = useState('');
   const [selectedAssetAmount, setSelectedAssetAmount] = useState('');
+
+  const { account } = useMetaMask() ?? {};
+  const { t721 } = useContracts();
 
   const changeAsset = (e: React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.value) {
       setSelectedAsset(e.target.value)
       setCollections(getCollections(e.target.value))
+      setTokens([''])
+      setSelectedAssetAddress('')
       props.update({
-        asset: e.target.value,
-        assetAddress: selectedAssetAddress,
-        token: selectedToken,
-        assetAmount: selectedAssetAmount
-      })
+        type: e.target.value,
+        address: selectedAssetAddress,
+        tokenId: selectedToken,
+        amount: selectedAssetAmount
+      } )
     }
   }
 
   const changeCollection = (e: React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.value) {
-      setselectedAssetAddress(e.target.value)
-      setTokens(getUserTokens())
+      setSelectedAssetAddress(e.target.value)
+      getUserTokens().then((tokens) => {
+        setTokens(tokens)
+      })
       props.update({
-        asset: selectedAsset,
-        assetAddress: e.target.value,
-        token: selectedToken,
-        assetAmount: selectedAssetAmount
+        type: selectedAsset,
+        address: e.target.value,
+        tokenId: selectedToken,
+        amount: selectedAssetAmount
       })
     }
   }
@@ -44,10 +55,10 @@ export function SelectAsset(props: { title: string, update: (data: {}) => void }
       setSelectedToken(e.target.value)
     }
     props.update({
-      asset: selectedAsset,
-      assetAddress: selectedAssetAddress,
-      token: e.target.value,
-      assetAmount: selectedAssetAmount
+      type: selectedAsset,
+      address: selectedAssetAddress,
+      tokenId: e.target.value,
+      amount: selectedAssetAmount
     })
   }
 
@@ -55,19 +66,17 @@ export function SelectAsset(props: { title: string, update: (data: {}) => void }
     if(e.target.value) {
       setSelectedAssetAmount(e.target.value)
       props.update({
-        asset: selectedAsset,
-        assetAddress: selectedAssetAddress,
-        token: selectedToken,
-        assetAmount: e.target.value
+        type: selectedAsset,
+        address: selectedAssetAddress,
+        tokenId: selectedToken,
+        amount: e.target.value
       })
     }
   }
 
-  const getUserTokens = () => {
-    return [
-      '3',
-      '5'
-    ]
+  const getUserTokens = async () => {
+    let tokens = await t721?.userTokens(account);
+    return tokens.map((e: BigNumber) => { return e.toString() })
   }
 
   return (
@@ -101,13 +110,16 @@ export function SelectAsset(props: { title: string, update: (data: {}) => void }
             </MenuItem>
           ))}
         </TextField>
-        <TextField  select className='select' value={selectedToken} label={props.title + ' Asset Tokens'}onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeToken(e)}}>
-          {tokens.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
+        { props.title === 'Proposed' ? 
+          <TextField  select className='select' value={selectedToken} label={props.title + ' Asset Tokens'}onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeToken(e)}}>
+            {tokens.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField> :
+          <TextField className='select' label={props.title + ' Asset Tokens'} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeToken(e)}}></TextField>
+        }
       </Box>
       : null
     }
@@ -120,13 +132,7 @@ export function SelectAsset(props: { title: string, update: (data: {}) => void }
             </MenuItem>
           ))}
         </TextField>
-        <TextField  select className='select' value={selectedToken} label={props.title + ' Asset Tokens'} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeToken(e)}}>
-          {tokens.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
+        <TextField className='select' value={selectedToken} label={props.title + ' Asset Tokens'} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeToken(e)}}></TextField>
         <TextField className='select' value={selectedAssetAmount} label={props.title + ' Asset Amount'} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {changeAssetAmount(e)}}></TextField>
       </Box>
       : null
