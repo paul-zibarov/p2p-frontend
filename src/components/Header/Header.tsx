@@ -10,7 +10,7 @@ import { CreateLotModal } from '../CreateLotModal';
 import { ReactComponent as BusdLogo } from '../../assets/busd.svg'
 
 export function Header() {
-  const { connect, disconnect, account } = useMetaMask() ?? {}
+  const { connect, account } = useMetaMask() ?? {}
   const { setOpen } = useModals() ?? {}
   const { t20 } = useContracts()
   let navigate = useNavigate()
@@ -21,7 +21,7 @@ export function Header() {
     t20?.balanceOf(account).then((res: number) => {
       setBalance(res);
     })
-  }, [account])
+  }, [account, t20])
 
   return (
     <Box className="header">

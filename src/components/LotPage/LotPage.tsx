@@ -34,7 +34,7 @@ export function LotPage() {
                 <Box className="token-price">
                     <Typography className="token-price-title" variant="h6" component="h2">Price:</Typography>
                     <Typography className="value" variant="h6" component="h2">1000</Typography>
-                    { lot.askedAsset == contractsData.t20.address ?
+                    { lot.askedAsset === contractsData.t20.address ?
                         <SvgIcon className='asset-icon' inheritViewBox component={BusdLogo}></SvgIcon>
                         : null
                     }
