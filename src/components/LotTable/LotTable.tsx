@@ -104,7 +104,7 @@ export function LotTable(props: { type: string }) {
               </TableCell>
               <TableCell>{row.askedAssetId}</TableCell>
               <TableCell>
-                <Button className="button" variant="contained" onClick={() => {navigate(`/lots/${row.id}`)}}>Details</Button>
+                <Button className="button" variant="contained" onClick={() => {navigate(`/lots/${row.lotId}`)}}>Details</Button>
               </TableCell>
             </TableRow>
             ))}

@@ -33,7 +33,17 @@
     color: white;
 }
 
+.lot-id {
+    display: flex;
+    margin-top: 10px;
+}
+
 .token-price {
+    display: flex;
+    margin-top: 10px;
+}
+
+.token-amount {
     display: flex;
     margin-top: 10px;
 }
