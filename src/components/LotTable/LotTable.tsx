@@ -1,93 +1,59 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Pagination, Box, SvgIcon } from '@mui/material';
-
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Box, SvgIcon, TablePagination } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-
 import { ReactComponent as BusdLogo } from '../../assets/busd.svg'
+import { useMetaMask } from '../../hooks/metamask';
+import { Lot } from '../../types/Lot';
+import { apiURL, contractsData } from '../../constants';
 import './styles.css';
 
+const getLots = async (page: number, countPerPage: number, type: string, account: string) => {
+  let response;
+  if(type === 'all') {
+    response = await fetch(apiURL + '/getActiveLots?' + new URLSearchParams({
+      page: page.toString(),
+      countPerPage: countPerPage.toString()
+    }));
+  } else {
+    response = await fetch(apiURL + '/getOwnerLots?' + new URLSearchParams({
+      page: page.toString(),
+      countPerPage: countPerPage.toString(),
+      owner: account
+    }));
+  }
+  
+  let lots: Array<Lot> = await response?.json();
 
-
-// const getRows = (page: number, countPerPage: number) => {
-const getRows = () => {
-  return [
-    { 
-      id: 1, 
-      collection: "Rickroll NFT",
-      tokenId: 1, 
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 100, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 2, 
-      collection: "Rickroll NFT",
-      tokenId: 2,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 1000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 3, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 4, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 5, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 6, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 7, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 8, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    },
-    { 
-      id: 9, 
-      collection: "Rickroll NFT",
-      tokenId: 3,  
-      owner: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1", 
-      price: 10000, 
-      currency: "0xAB2E112c21B498ed5c017d742b0DeAC6e09E8FD1"
-    }
-  ];
+  return lots;
 }
 
-export function LotTable() {
+export function LotTable(props: { type: string }) {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [lots, setLots] = useState<Lot[]>([]);
+  const [lotsCount, setLotsCount] = useState(0);
+
+  const { account } = useMetaMask() ?? { account: "" };
+
+  useEffect(() => {
+    setLots([])
+    getLots(page, rowsPerPage, props.type, account || "").then((res) => {
+      setLots(res);
+      setLotsCount(res.length);
+    });
+
+  }, [page, rowsPerPage, props.type, account])
+
   let navigate = useNavigate()
+
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setPage(newPage);
+  }
+  
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(0);
+  }
 
   return (
     <Box>
@@ -95,36 +61,39 @@ export function LotTable() {
         <TableHead>
           <TableRow>
             <TableCell>Lot id</TableCell>
-            <TableCell align="right">Collection</TableCell>
-            <TableCell align="right">Token ID</TableCell>
-            <TableCell align="right">Owner</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Currency</TableCell>
-            <TableCell onClick={() => {}} align="right">Details</TableCell>
+            <TableCell>Proposed Asset</TableCell>
+            <TableCell>Proposed Token ID</TableCell>
+            <TableCell>Proposed Amount</TableCell>
+            <TableCell>Owner</TableCell>
+            <TableCell>Asked Amount</TableCell>
+            <TableCell>Asked Asset</TableCell>
+            <TableCell>Asked Token ID</TableCell>
+            <TableCell>Details</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {getRows().map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">{row.id}</TableCell>
-              <TableCell align="right">{row.collection}</TableCell>
-              <TableCell align="right">{row.tokenId}</TableCell>
-              <TableCell align="right">{row.owner}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right" className='asset'>
-                <SvgIcon className='asset-icon' inheritViewBox component={BusdLogo}></SvgIcon>
+          {lots.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell component="th" scope="row">{row.lotId}</TableCell>
+              <TableCell>{row.proposedAssetAddress}</TableCell>
+              <TableCell>{row.proposedAssetId}</TableCell>
+              <TableCell>{row.proposedAmount}</TableCell>
+              <TableCell>{row.sellerAddress}</TableCell>
+              <TableCell>{row.askedAmount}</TableCell>
+              <TableCell>{
+                row.askedAssetAddress === contractsData.t20.address ? 
+                  <SvgIcon className='asset-icon' inheritViewBox component={BusdLogo}></SvgIcon> : 
+                  row.askedAssetAddress}
               </TableCell>
-              <TableCell align="right">
+              <TableCell>{row.askedAssetId}</TableCell>
+              <TableCell>
                 <Button className="button" variant="contained" onClick={() => {navigate(`/lots/${row.id}`)}}>Details</Button>
               </TableCell>
             </TableRow>
             ))}
         </TableBody>
       </Table>
-      <Pagination className="pagination" count={3} variant="outlined" color="primary" size="large" />
+      <TablePagination component="div" count={Math.ceil(lotsCount / rowsPerPage)} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
     </Box>
   );
 }
