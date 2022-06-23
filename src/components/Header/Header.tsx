@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button, SvgIcon, Box } from '@mui/material';
 
 import { useMetaMask } from '../../hooks/metamask';
-import { useContracts } from '../../hooks/constracts';
+import { useContracts } from '../../hooks/contracts';
 import { useNavigate } from "react-router-dom";
 import { useModals } from '../../hooks/modals';
 import './styles.css';
@@ -18,7 +18,7 @@ export function Header() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    t20?.methods.balanceOf(account).call().then((res: number) => {
+    t20?.balanceOf(account).then((res: number) => {
       setBalance(res);
     })
   }, [account])
