@@ -27,6 +27,21 @@ const getLots = async (page: number, countPerPage: number, type: string, account
   return lots;
 }
 
+const getLotsCount = async (type: string, account: string) => {
+  let response;
+  if(type === 'all') {
+    response = await fetch(apiURL + '/getActiveLotsCount');
+  } else {
+    response = await fetch(apiURL + '/getActiveOwnerLotsCount?' + new URLSearchParams({
+      owner: account
+    }));
+  }
+  
+  let data: { count: number } = await response?.json();
+
+  return data.count;
+}
+
 export function LotTable(props: { type: string }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -37,9 +52,11 @@ export function LotTable(props: { type: string }) {
 
   useEffect(() => {
     setLots([])
-    getLots(page, rowsPerPage, props.type, account || "").then((res) => {
+    getLots(page + 1, rowsPerPage, props.type, account || "").then((res) => {
       setLots(res);
-      setLotsCount(res.length);
+      getLotsCount(props.type, account || "").then((res) => {
+        setLotsCount(res);
+      })
     });
 
   }, [page, rowsPerPage, props.type, account])
@@ -93,7 +110,7 @@ export function LotTable(props: { type: string }) {
             ))}
         </TableBody>
       </Table>
-      <TablePagination component="div" count={Math.ceil(lotsCount / rowsPerPage)} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
+      <TablePagination component="div" count={lotsCount} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
     </Box>
   );
 }
