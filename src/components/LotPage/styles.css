@@ -9,7 +9,6 @@
 .image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .image-box {
@@ -38,6 +37,10 @@
     margin-top: 10px;
 }
 
+.token-name {
+    display: flex;
+}
+
 .token-price {
     display: flex;
     margin-top: 10px;
@@ -56,6 +59,10 @@
 .token-id {
     display: flex;
     margin-top: 10px;
+}
+
+.token-symbol {
+    margin-left: 15px;
 }
 
 .value {

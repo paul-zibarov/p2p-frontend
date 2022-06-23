@@ -45,6 +45,7 @@ export function LotPage() {
     });
 
     const [name, setName] = useState("");
+    const [symbol, setSymbol] = useState("");
     const [imageURL, setImageURL] = useState("");
     const [allowance, setAllowance] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -52,10 +53,13 @@ export function LotPage() {
     useEffect(() => {
         if(lot.askedAssetAddress) {
           checkAllowance()
+          getCollectionSymbol().then((res) => {
+            setSymbol(res)
+          })
           getCollectionName().then((res) => {
             setName(res)
           })
-          getTokenImage(lot.lotId).then((res) => {
+          getTokenImage(lot.proposedAssetId).then((res) => {
             setImageURL(res)
           })
         }
@@ -86,6 +90,10 @@ export function LotPage() {
         return await t1155?.name();
     }
 
+    const getCollectionSymbol = async () => {
+        return await t1155?.symbol();
+    }
+
     const getTokenImage = async (tokenId: number) => {
         return await t1155?.uri(tokenId);
     }
@@ -104,7 +112,7 @@ export function LotPage() {
                 <Box
                     className="image"
                     component="img"
-                    src={imageURL || "https://c.tenor.com/x8v1oNUOmg4AAAAd/rickroll-roll.gif"}
+                    src={imageURL}
                 />
             </Box>
             <Box className='info-box'>
@@ -114,6 +122,7 @@ export function LotPage() {
                 </Box>
                 <Box className='token-name'>
                     <Typography className="token-title" variant="h2" component="h2">{name}</Typography>
+                    <Typography className="token-symbol" variant="h2" component="h2">{"(" + symbol + ")"}</Typography>
                 </Box>
                 <Box className='token-collection'>
                     <Typography className="token-collection-title" variant="h6" component="h2">Collection:</Typography>
