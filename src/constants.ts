@@ -1,5 +1,7 @@
 import { erc20ABI, erc721ABI, erc1155ABI, p2pABI } from './abis'
 
+export const apiURL = 'https://nft-p2p-backend.herokuapp.com'
+
 export const contractsData = {
     t20: {
         address: "0xD44348AEeA736DFC368C51F6FD1805cB6E111AF0",
