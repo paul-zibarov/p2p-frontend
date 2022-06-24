@@ -11,3 +11,10 @@
 .asset-icon {
     padding-right: 12%;
 }
+
+.no-lots-title-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}

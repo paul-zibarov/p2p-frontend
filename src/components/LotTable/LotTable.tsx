@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Box, SvgIcon, TablePagination } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Box, SvgIcon, TablePagination, Typography } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BusdLogo } from '../../assets/busd.svg'
 import { useMetaMask } from '../../hooks/metamask';
@@ -54,8 +54,10 @@ export function LotTable(props: { type: string }) {
     setLots([])
     getLots(page + 1, rowsPerPage, props.type, account || "").then((res) => {
       setLots(res);
+      console.log(res)
       getLotsCount(props.type, account || "").then((res) => {
         setLotsCount(res);
+        console.log(res)
       })
     });
 
@@ -88,28 +90,34 @@ export function LotTable(props: { type: string }) {
             <TableCell>Details</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {lots.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">{row.lotId}</TableCell>
-              <TableCell>{row.proposedAssetAddress}</TableCell>
-              <TableCell>{row.proposedAssetId}</TableCell>
-              <TableCell>{row.proposedAmount}</TableCell>
-              <TableCell>{row.sellerAddress}</TableCell>
-              <TableCell>{row.askedAmount}</TableCell>
-              <TableCell>{
-                row.askedAssetAddress === contractsData.t20.address ? 
-                  <SvgIcon className='asset-icon' inheritViewBox component={BusdLogo}></SvgIcon> : 
-                  row.askedAssetAddress}
-              </TableCell>
-              <TableCell>{row.askedAssetId}</TableCell>
-              <TableCell>
-                <Button className="button" variant="contained" onClick={() => {navigate(`/lots/${row.lotId}`)}}>Details</Button>
-              </TableCell>
-            </TableRow>
+          <TableBody>
+            {lots.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">{row.lotId}</TableCell>
+                <TableCell>{row.proposedAssetAddress}</TableCell>
+                <TableCell>{row.proposedAssetId}</TableCell>
+                <TableCell>{row.proposedAmount}</TableCell>
+                <TableCell>{row.sellerAddress}</TableCell>
+                <TableCell>{row.askedAmount}</TableCell>
+                <TableCell>{
+                  row.askedAssetAddress === contractsData.t20.address ? 
+                    <SvgIcon className='asset-icon' inheritViewBox component={BusdLogo}></SvgIcon> : 
+                    row.askedAssetAddress}
+                </TableCell>
+                <TableCell>{row.askedAssetId}</TableCell>
+                <TableCell>
+                  <Button className="button" variant="contained" onClick={() => {navigate(`/lots/${row.lotId}`)}}>Details</Button>
+                </TableCell>
+              </TableRow>
             ))}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+        { lots.length === 0 ?
+          <Box className='no-lots-title-box'>
+              <Typography className="no-lots-title" variant="h3" component="h2">No created lots</Typography> 
+          </Box> :
+          null
+        }
       <TablePagination component="div" count={lotsCount} page={page} onPageChange={handleChangePage} rowsPerPage={rowsPerPage} onRowsPerPageChange={handleChangeRowsPerPage}/>
     </Box>
   );

@@ -32,8 +32,8 @@
     height: 5vh;
     display: flex;
     justify-content: space-between;
-    padding-bottom: 1%;
-    border-bottom: solid grey 2px;
+    padding-bottom: 7px;
+    border-bottom: solid grey 1px;
 }
 
 .connection {

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Box, Button, SvgIcon, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useParams } from "react-router-dom";
-
 import './styles.css';
 import { apiURL, contractsData } from '../../constants';
 import { ReactComponent as BusdLogo } from '../../assets/busd.svg'
