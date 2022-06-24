@@ -60,11 +60,10 @@ export function CreateLotModal() {
   const createTrade = (e: any) => {
     e.preventDefault();
     if(proposedAsset?.type === 'ERC-721' && askedAsset?.type === 'ERC-20') {
-      p2p?.createTrade721to20(proposedAsset.address, proposedAsset.tokenId, askedAsset.address, askedAsset.amount, tradeDeadline).then((tx: any) => {
-        console.log(tx)
+      p2p?.createTrade721to20(proposedAsset.address, proposedAsset.tokenId, askedAsset.address, '0x' + (Number(askedAsset.amount) * 10 ** 18).toString(16), tradeDeadline).then((tx: any) => {
       })
     } else if (proposedAsset?.type === 'ERC-1155' && askedAsset?.type === 'ERC-20') { 
-      p2p?.createTrade1155to20(proposedAsset.address, proposedAsset.amount, proposedAsset.tokenId, askedAsset.address, askedAsset.amount, tradeDeadline)
+      p2p?.createTrade1155to20(proposedAsset.address, proposedAsset.amount, proposedAsset.tokenId, askedAsset.address, '0x' + (Number(askedAsset.amount) * 10 ** 18).toString(16), tradeDeadline).then((tx: any) => {
     }
   }
 
